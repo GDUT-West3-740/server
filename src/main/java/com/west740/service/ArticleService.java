@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author lucifer
  */
@@ -32,5 +34,21 @@ public class ArticleService {
         */
         int result = articleMapper.addNewArticle(article);
         return 0;
+    }
+
+    public int getArticleCountByState(Integer state,Long uid,String keywords){
+        return articleMapper.getArticleCountByState(state,uid,keywords);
+    }
+
+    public List<Article> getArticleByState(Integer state,Integer page,Integer size,String keywords){
+        int start = (page-1)*size;
+        Long uid = Long.valueOf(1);
+        return articleMapper.getArticleByState(state,start,size,uid,keywords);
+    }
+
+
+    public int restoreArticle(Integer articleId) {
+
+        return articleMapper.updateArticleStateById(articleId,1);
     }
 }

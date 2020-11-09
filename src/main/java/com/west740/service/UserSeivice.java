@@ -5,7 +5,6 @@ import com.west740.bean.User;
 import com.west740.mapper.RoleMapper;
 import com.west740.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +21,8 @@ public class UserSeivice {
     @Autowired
     RoleMapper roleMapper;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
 
     public User loadUserByUsername(String username){
         User user = userMapper.loadUserByUsername(username);
