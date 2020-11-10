@@ -2,6 +2,7 @@ package com.west740.mapper;
 
 import com.west740.bean.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author lucifer
@@ -18,5 +19,5 @@ public interface UserMapper {
     int deleteUserById(Long id);
 
 
-
+    int updateUserEmail(@Param("email") String email,@Param("id") Long id);
 }

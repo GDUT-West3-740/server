@@ -6,4 +6,11 @@
     <select id="getRolesByUid" parameterType="long" resultType="com.west740.bean.Role">
         SELECT r.* FROM roles r,roles_user ru WHERE r.`id`=ru.`rid` AND ru.`uid`=#{uid}
     </select>
+    <insert id="addRoles">
+        INSERT INTO roles_user VALUES
+        <foreach collection="roles" item="role" separator=",">
+            (null,#{role},#{uid})
+        </foreach>
+    </insert>
+
 </mapper>
