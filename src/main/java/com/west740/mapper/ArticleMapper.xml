@@ -21,7 +21,7 @@
         </where>
     </select>
     <select id="getArticleByState" resultType="com.west740.bean.Article">
-        SELECT a.id,a.`title`,a`editTime`,a.`pageView`,a.`state`,u.`nickname`,c.`cateName`,a.uid FROM article a,user u,category c
+        SELECT a.`id`,a.`title`,a.`editTime`,a.`pageView`,a.`state`,u.`nickname`,c.`cateName`,a.`uid` FROM article a,user u,category c
         WHERE a.`cid`=c.`id` AND a.`uid`=u.`id`
         <if test="state!=-2">
             AND a.uid=#{uid}
