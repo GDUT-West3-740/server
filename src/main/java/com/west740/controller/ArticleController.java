@@ -3,13 +3,18 @@ package com.west740.controller;
 import com.west740.bean.Article;
 import com.west740.bean.ResponseBean;
 import com.west740.service.ArticleService;
+import com.west740.utils.Util;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author lucifer
@@ -33,6 +38,34 @@ public class ArticleController {
         }
     }
 
+
+    @RequestMapping(value = "/uploadimg", method = RequestMethod.POST)
+    public ResponseBean uploadImg(HttpServletRequest req, MultipartFile image) {
+        StringBuffer url = new StringBuffer();
+        String filePath = "/blogimg/" + simpleDateFormat.format(new Date());
+        String imgFolderPath = req.getServletContext().getRealPath(filePath);
+        File imgFolder = new File(imgFolderPath);
+        if (!imgFolder.exists()) {
+            imgFolder.mkdirs();
+        }
+        url.append(req.getScheme())
+                .append("://")
+                .append(req.getServerName())
+                .append(":")
+                .append(req.getServerPort())
+                .append(req.getContextPath())
+                .append(filePath);
+        String imgName = UUID.randomUUID() + "_" + image.getOriginalFilename().replaceAll(" ", "");
+        try {
+            IOUtils.write(image.getBytes(), new FileOutputStream(new File(imgFolder, imgName)));
+            url.append("/").append(imgName);
+            return new ResponseBean("success", url.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseBean("error", "上传失败!");
+    }
+
     @GetMapping("/{aid}")
     public Article getArticleById(@PathVariable Long aid){
         Article article = articleService.getArticleById(aid);
@@ -53,7 +86,7 @@ public class ArticleController {
                                                 @RequestParam(value = "page",defaultValue = "1") Integer page,
                                                 @RequestParam(value = "count",defaultValue = "6") Integer size,
                                                 String keywords){
-        Long uid = Long.valueOf(1);//等完成security后就替换为当前用户ID
+        Long uid = Util.getCurrentUser().getId();
         int totalCount = articleService.getArticleCountByState(state,uid,keywords);
         List<Article> articles = articleService.getArticleByState(state,page,size,keywords);
         Map<String,Object> map = new HashMap<>();
@@ -61,6 +94,7 @@ public class ArticleController {
         map.put("articles",articles);
         return map;
     }
+
 
     @PutMapping(value = "/restore")
     public ResponseBean restoreArticle(Integer articleId){
@@ -71,5 +105,14 @@ public class ArticleController {
 
     }
 
+    @RequestMapping("/dataStatistics")
+    public Map<String,Object> dataStatistics() {
+        Map<String, Object> map = new HashMap<>();
+        List<String> categories = articleService.getCategories();
+        List<Integer> dataStatistics = articleService.getDataStatistics();
+        map.put("categories", categories);
+        map.put("ds", dataStatistics);
+        return map;
+    }
 
 }

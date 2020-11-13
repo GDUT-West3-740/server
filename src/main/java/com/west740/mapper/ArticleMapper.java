@@ -22,4 +22,18 @@ public interface ArticleMapper {
                                     @Param("count") Integer count, @Param("uid") Long uid,@Param("keywords") String keywords);
 
     int updateArticleStateById(@Param("articleId") Integer articleId,@Param("state") Integer state);
+
+    int updateArticleState(@Param("aids") Long aids[], @Param("state") Integer state);
+
+    int deleteArticleById(@Param("aids") Long[] aids);
+
+    int updateArticle(Article article);
+
+    void pvIncrement(Long aid);
+
+    void pvStatisticsPerDay();
+
+    List<String> getCategories(Long uid);
+
+    List<Integer> getDataStatistics(Long uid);
 }
