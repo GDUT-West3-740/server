@@ -1,7 +1,7 @@
 package com.west740.controller;
 
 import com.west740.bean.ResponseBean;
-import com.west740.service.UserSeivice;
+import com.west740.service.UserService;
 import com.west740.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +16,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserSeivice userSeivice;
+    UserService userService;
 
     @RequestMapping("/currentUserName")
     public String getCurrentUserName(){
@@ -46,7 +46,7 @@ public class UserController {
 
     @PutMapping("/updateUserEmail")
     public ResponseBean updateUserEmail(String email){
-        if(userSeivice.updateUserEmail(email)==1){
+        if(userService.updateUserEmail(email)==1){
             return new ResponseBean("success","开启成功！");
         }
         return new ResponseBean("error","开启失败");

@@ -1,6 +1,6 @@
 package com.west740.config;
 
-import com.west740.service.UserSeivice;
+import com.west740.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,11 +27,11 @@ import java.io.PrintWriter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserSeivice userSeivice;
+    UserService userService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userSeivice);
+        auth.userDetailsService(userService);
     }
 
 

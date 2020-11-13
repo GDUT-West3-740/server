@@ -2,7 +2,7 @@ package com.west740.controller;
 
 import com.west740.bean.ResponseBean;
 import com.west740.bean.User;
-import com.west740.service.UserSeivice;
+import com.west740.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LoginRegisterController {
 
     @Autowired
-    UserSeivice userSeivice;
+    UserService userService;
 
     @RequestMapping("/login_error")
     public ResponseBean loginError(){
@@ -32,7 +32,7 @@ public class LoginRegisterController {
 
     @PostMapping("/reg")
     public ResponseBean register(User user){
-        int result = userSeivice.register(user);
+        int result = userService.register(user);
         if (result == 0){
             return new ResponseBean("success","注册成功！");
         }else if (result == 1){

@@ -18,7 +18,7 @@ import java.util.List;
  * @author lucifer
  */
 @Service
-public class UserSeivice implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     UserMapper userMapper;
@@ -61,5 +61,32 @@ public class UserSeivice implements UserDetailsService {
         } else {
             return 2;
         }
+    }
+
+
+    public List<User> getUserByNickname(String nickname) {
+        List<User> list = userMapper.getUserByNickname(nickname);
+        return list;
+    }
+
+    public List<Role> getAllRole() {
+        return userMapper.getAllRole();
+    }
+
+    public int updateUserEnabled(Boolean enabled, Long uid) {
+        return userMapper.updateUserEnabled(enabled, uid);
+    }
+
+    public int deleteUserById(Long uid) {
+        return userMapper.deleteUserById(uid);
+    }
+
+    public int updateUserRoles(Long[] rids, Long id) {
+        int i = userMapper.deleteUserRolesByUid(id);
+        return userMapper.setUserRoles(rids, id);
+    }
+
+    public User getUserById(Long id) {
+        return userMapper.getUserById(id);
     }
 }
