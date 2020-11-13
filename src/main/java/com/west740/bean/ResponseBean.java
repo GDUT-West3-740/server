@@ -3,15 +3,15 @@ package com.west740.bean;
 /**
  * @author lucifer
  */
-public class RespBean {
+public class ResponseBean {
 
     private String status;
     private String msg;
 
-    public RespBean() {
+    public ResponseBean() {
     }
 
-    public RespBean(String status, String msg) {
+    public ResponseBean(String status, String msg) {
         this.status = status;
         this.msg = msg;
     }
