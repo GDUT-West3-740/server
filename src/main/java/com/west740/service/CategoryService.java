@@ -1,7 +1,7 @@
 package com.west740.service;
 
-import org.sang.bean.Category;
-import org.sang.mapper.CategoryMapper;
+import com.west740.bean.Category;
+import com.west740.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
