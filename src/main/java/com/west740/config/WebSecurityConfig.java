@@ -10,9 +10,11 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.util.DigestUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +31,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
-    @Override
+    @Override//用到userService
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+        auth.userDetailsService(userService).passwordEncoder(
+                //这里重写了加密方法 原来的加密工具是BCryptPasswordEncoder
+                new PasswordEncoder() {
+                    @Override
+                    public String encode(CharSequence charSequence) {
+                        return DigestUtils.md5DigestAsHex(charSequence.toString().getBytes());
+                    }
+
+                    /**
+                     * @param charSequence 明文
+                     * @param s 密文
+                     * @return
+                     */
+                    @Override
+                    public boolean matches(CharSequence charSequence, String s) {
+                        return s.equals(DigestUtils.md5DigestAsHex(charSequence.toString().getBytes()));
+                    }
+                });
     }
 
 
@@ -61,9 +80,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 printWriter.flush();
                 printWriter.close();
             }
-        }).loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password").permitAll()
-        .and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
-    }
+        }).loginProcessingUrl("/login").
+                usernameParameter("username").
+                passwordParameter("password").
+                permitAll().
+                and().
+                logout().
+                permitAll().
+                and().
+                csrf().
+                disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+        }
 
     @Override
     public void configure(WebSecurity web) throws Exception {

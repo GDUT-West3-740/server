@@ -56,7 +56,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled) {
